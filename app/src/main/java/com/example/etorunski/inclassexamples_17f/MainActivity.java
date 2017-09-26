@@ -16,23 +16,17 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-
-
-
-       CheckBox cb =  (CheckBox)findViewById(R.id.check_box);
+        CheckBox cb =  (CheckBox)findViewById(R.id.check_box);
         final TextView tv = (TextView) findViewById(R.id.textField);
 
-       Button b1 = (Button)findViewById(R.id.button_one);
-       b1.setOnClickListener(new View.OnClickListener() {
+        Button b1 = (Button)findViewById(R.id.button_one);
+        b1.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
 
-                   tv.setText("DOne in java");
+                   tv.setText("Done in java");
 
-           }
+            }
        });
-      //  setContentView(R.layout.layout_two);
-
-    }
+     }
 }
