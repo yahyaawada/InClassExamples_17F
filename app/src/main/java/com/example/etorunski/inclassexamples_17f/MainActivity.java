@@ -27,42 +27,54 @@ public class MainActivity extends Activity {
         final TextView tv = (TextView) findViewById(R.id.textField);
         String saved;
 
-       final SharedPreferences sPrefs = getSharedPreferences("AnyFileName", Context.MODE_PRIVATE);
 
-        SharedPreferences.Editor writer = sPrefs.edit();
-
-        writer.putString("Name", "Eric");
-        writer.putString("OtherInfo", "T316");
-        writer.commit(); //this writes the file
+        //Open the sharedPreferences file:
+        final SharedPreferences sPrefs = getSharedPreferences("AnyFileName", Context.MODE_PRIVATE);
 
 
-
+        //If the incoming bundle is not null, then you are passing data to the activity:
         if(savedInstanceState != null)
          saved = savedInstanceState.getString("ReservedName");
+
+        String fromFile = sPrefs.getString("Name", "Nothing found");
+        fromFile = sPrefs.getString("Not there", "Nothing found");
 
         Button b1 = (Button)findViewById(R.id.button_one);
         b1.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               String fromFile = sPrefs.getString("Name", "Nothing found");
-               fromFile = sPrefs.getString("Not there", "Nothing found");
 
-                   tv.setText("Done in java");
+               //Edit the file:
+               SharedPreferences.Editor writer = sPrefs.edit();
+               //Add entries to the file:
+               writer.putString("Name", "Eric");
+               writer.putString("OtherInfo", "T316");
 
-                Bundle someInformation = new Bundle();
-                   Intent nextPage = new Intent(MainActivity.this, PageTwo.class);
+               //this writes the file:
+               writer.commit();
 
 
-                   /*Intent newPage = new Intent(Intent.ACTION_VIEW);
-                    nextPage.putExtra("FirstName", "Eric");
-                    nextPage.putExtra("LastName", "T");
+               tv.setText("Done in java");
+
+               //For passing information to the next Activity, create a bundle:
+               Bundle someInformation = new Bundle();
+               Intent nextPage = new Intent(MainActivity.this, PageTwo.class);
+               nextPage.putExtra("FirstName", "Eric");
+               nextPage.putExtra("LastName", "T");
+
+
+               //To open a webpage using default Intents:
+               /*Intent newPage = new Intent(Intent.ACTION_VIEW);
                Uri imgUri = Uri.parse("http://www.cbc.ca");
                newPage.setData(imgUri);*/
+
+               //To transition to the new Activity  with requestCode 5 and pass someInformation:
                startActivityForResult(nextPage, 5, someInformation);
 
             }
        });
 
+        //For button 2, start a different Activity, with 6 as the request code
         b1 = (Button)findViewById(R.id.button_two);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,16 +84,19 @@ public class MainActivity extends Activity {
                 startActivityForResult(nextPage, 6);
             }
             });
+        //Set a logging message at the Error level
         Log.e(NAME, "In onCreate");
      }
 
+     //This gets called before the Activity is stopped. You can save information in memory to be passed
+    //back into onCreate(Bundle )
     protected void onSaveInstanceState (Bundle outState)
     {
         outState.putInt("ReservedName", 56);
-
-
     }
 
+
+    //This gets called after the Activity started by startActivity() has ended. You can pass data back here:
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
