@@ -4,17 +4,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorEventListener {
     int i = 0;
 
     protected final String NAME = "MainActivity";
@@ -22,6 +29,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*FullScreen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+*/
         setContentView(R.layout.activity_main);
         CheckBox cb =  (CheckBox)findViewById(R.id.check_box);
         final TextView tv = (TextView) findViewById(R.id.textField);
@@ -79,11 +93,37 @@ public class MainActivity extends Activity {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Vibrator vib = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+                // Vibrate for 500 milliseconds
+                vib.vibrate(500);
+
                 Intent nextPage = new Intent(MainActivity.this, PageThree.class);
 
                 startActivityForResult(nextPage, 6);
             }
             });
+
+        Button arrayButton = (Button)findViewById(R.id.arrayListButton);
+        arrayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Vibrator vib = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+                // Vibrate for 200 milliseconds
+                vib.vibrate(200);
+
+                startActivity(new Intent(MainActivity.this, ArrayListActivity.class));
+            }
+        });
+
+
+
+        //Sensors:
+         SensorManager mSensorManager;
+         Sensor mSensor;
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
         //Set a logging message at the Error level
         Log.e(NAME, "In onCreate");
      }
@@ -106,5 +146,18 @@ public class MainActivity extends Activity {
             String dataBack =   data.getStringExtra("Hello");
             Log.i("Info", dataBack);
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+            double x = event.values[0];
+            double y = event.values[1];
+            double z = event.values[2];
+            Log.i("Sensor position", String.format("%f %f %f", x, y, z));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
