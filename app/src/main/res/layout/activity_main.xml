@@ -35,7 +35,7 @@
             android:text="1" />
 
 
-        <Button
+        <Button android:id="@+id/button_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
