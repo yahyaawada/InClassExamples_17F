@@ -18,15 +18,10 @@ import java.util.ArrayList;
 
 public class ArrayListActivity extends Activity {
 
-    ArrayList<String> sourceData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        sourceData = new ArrayList<>();
-        sourceData.add("One");
-        sourceData.add("Two");
-        sourceData.add("Three");
 
 
         setContentView(R.layout.activity_array_list);
