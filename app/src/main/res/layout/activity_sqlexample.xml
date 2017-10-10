@@ -28,4 +28,8 @@
     <Button android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Insert" android:id="@+id/insert_button"></Button>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list_results"></ListView>
 </LinearLayout>

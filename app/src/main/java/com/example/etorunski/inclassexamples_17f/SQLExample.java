@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 public class SQLExample extends Activity {
 
@@ -24,8 +26,40 @@ public class SQLExample extends Activity {
         final SQLiteDatabase db = aHelperObject.getWritableDatabase();
         Button insButton = (Button) findViewById(R.id.insert_button);
 
-        Cursor results = db.query(false, name, new String[] {"ASSIGNMENT", "COMMENT"}, null, null, null, null, null, null);
+        Cursor results = db.query(false, name, new String[] {"_id", "ASSIGNMENT", "COMMENT"},
+                null, null , null, null, null, null);
 
+        int numResults = results.getCount();
+        int numColumns = results.getColumnCount();
+
+        int assignmentIndex = results.getColumnIndex("ASSIGNMENT");
+        int commentIndex = results.getColumnIndex("COMMENT");
+
+        results.moveToFirst();//resets the iteration of results
+        int [] arr = new int[]{R.id.assignment_name, R.id.comment};
+        ListView lv = (ListView)findViewById(R.id.list_results);
+        SimpleCursorAdapter adptr = new SimpleCursorAdapter(this, R.layout.cursor_layout, results,
+                new String[] {"ASSIGNMENT", "COMMENT", "_id"},
+                arr , 0);
+
+        String returnedComment, returnedName;
+        lv.setAdapter(adptr);
+
+        for(int i = 0; i < numResults; i++) {
+            returnedComment = results.getString(commentIndex);
+            returnedName = results.getString(assignmentIndex);
+            Log.i("Results:", returnedComment + " : " + returnedName);
+            results.moveToNext();
+        }
+
+        results.moveToFirst();//resets the iteration of results
+        while(!results.isAfterLast())
+        {
+            returnedComment = results.getString(commentIndex);
+            returnedName = results.getString(assignmentIndex);
+            Log.i("Results:", returnedComment + " : " + returnedName);
+            results.moveToNext();
+        }
 
         insButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +110,7 @@ public class SQLExample extends Activity {
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
         {
             db.execSQL("DROP TABLE IF EXISTS "+ name); //delete what was there previously
-            db.execSQL("CREATE TABLE " + name + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, ASSIGNMENT text, GRADE INTEGER, COMMENT text);");
+                db.execSQL("CREATE TABLE " + name + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, ASSIGNMENT text, GRADE INTEGER, COMMENT text);");
         }
 
         @Override
