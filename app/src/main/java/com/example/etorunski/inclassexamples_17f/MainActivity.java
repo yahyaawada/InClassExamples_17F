@@ -27,7 +27,9 @@ import java.util.Random;
 
 public class MainActivity extends Activity implements SensorEventListener {
     int i = 0;
-    String [] sourceData = { "Activity two", "Activity Three", "Base adapter example", "Open Web Page", "Vibrate phone"};
+    String [] sourceData = { "Activity two", "Activity Three",
+            "Base adapter example", "Open Web Page",
+            "Vibrate phone", "SQL Example"};
 
     private boolean listenToAccelerometer;
 
@@ -108,6 +110,9 @@ public class MainActivity extends Activity implements SensorEventListener {
                         Vibrator vib = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
                         // Vibrate for 200 milliseconds
                         vib.vibrate(200);
+                        break;
+                    case 5://SQL EXAMPLE
+                        startActivity(new Intent(MainActivity.this, SQLExample.class));
                         break;
                 }
             }

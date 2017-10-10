@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.etorunski.inclassexamples_17f">
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".PageTwo" />
         <activity android:name=".PageThree" />
-        <activity android:name=".ArrayListActivity"></activity>
+        <activity android:name=".ArrayListActivity" />
+        <activity android:name=".SQLExample"></activity>
     </application>
 
 </manifest>
