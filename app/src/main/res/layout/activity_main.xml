@@ -83,6 +83,12 @@
             android:text="3"
             android:layout_column="1"></Button>
     </GridLayout>
+
+    <Button android:id="@+id/arrayListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To Array List adapter" />
+
     <!--GridLayout android:columnCount="2" android:rowCount="2" android:layout_height="wrap_content" android:layout_width="match_parent" >
 <Button android:text="one" android:layout_columnWeight="1"/>
     <Button android:text="two" android:layout_columnWeight="1"/>
