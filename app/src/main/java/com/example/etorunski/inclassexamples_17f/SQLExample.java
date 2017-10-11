@@ -17,29 +17,43 @@ import android.widget.SimpleCursorAdapter;
 
 public class SQLExample extends Activity {
 
+    private final static String name = "MyTable";
+    private final static String DATABASE_NAME = "Filename.db";
+    private final static int VERSION_NUM = 1;
+    private final static String ASSIGNMENT = "ASSIGNMENT";
+    private final static String GRADE = "GRADE";
+    private final static String COMMENT = "COMMENT";
+    private final static String ID = "_id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sqlexample);
 
+        //Create an object for opening a database:
         MyOpenHelper aHelperObject = new MyOpenHelper(this);
         final SQLiteDatabase db = aHelperObject.getWritableDatabase();
         Button insButton = (Button) findViewById(R.id.insert_button);
 
-        Cursor results = db.query(false, name, new String[] {"_id", "ASSIGNMENT", "COMMENT"},
+        //This does a query and stores the results:
+        Cursor results = db.query(false, name, new String[] {ID, ASSIGNMENT, COMMENT},
                 null, null , null, null, null, null);
 
+        //How many rows in the results:
         int numResults = results.getCount();
+
+        //How many columns in the results:
         int numColumns = results.getColumnCount();
 
-        int assignmentIndex = results.getColumnIndex("ASSIGNMENT");
-        int commentIndex = results.getColumnIndex("COMMENT");
+        int assignmentIndex = results.getColumnIndex(ASSIGNMENT);
+        int commentIndex = results.getColumnIndex(COMMENT);
 
         results.moveToFirst();//resets the iteration of results
+        //This is an example of a SimpleCursorAdapter to fill a list view with database results:
         int [] arr = new int[]{R.id.assignment_name, R.id.comment};
         ListView lv = (ListView)findViewById(R.id.list_results);
         SimpleCursorAdapter adptr = new SimpleCursorAdapter(this, R.layout.cursor_layout, results,
-                new String[] {"ASSIGNMENT", "COMMENT", "_id"},
+                new String[] {ASSIGNMENT, COMMENT, ID},
                 arr , 0);
 
         String returnedComment, returnedName;
@@ -61,27 +75,29 @@ public class SQLExample extends Activity {
             results.moveToNext();
         }
 
+
+        // When you click on the button:
         insButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String assignmentName, comment, grade;
+                //get the strings typed:
                 assignmentName=((EditText)findViewById(R.id.assignment_field)).getText().toString();
                 comment = ((EditText)findViewById(R.id.comment_field)).getText().toString();
                 grade = ((EditText)findViewById(R.id.grade_field)).getText().toString();
 
+                //Use a content values object to insert them in the database
                 ContentValues newData = new ContentValues();
-                newData.put("ASSIGNMENT", assignmentName);
-               // newData.put("GRADE", grade);
-                newData.put("COMMENT", comment);
-                db.insert(name, "" , newData);
+                newData.put(ASSIGNMENT, assignmentName);
+                newData.put(GRADE, grade);
+                newData.put(COMMENT, comment);
 
+                //Then insert
+                db.insert(name, "" , newData);
             }
         });
     }
 
-    private final static String name = "MyTable";
-    private final static String DATABASE_NAME = "Filename.db";
-    private final static int VERSION_NUM = 1;
     // this is responsible for creating, opening and reading database
     protected class MyOpenHelper extends SQLiteOpenHelper
     {
@@ -96,21 +112,21 @@ public class SQLExample extends Activity {
         @Override
         public void onCreate(SQLiteDatabase db)
         {
-            db.execSQL("CREATE TABLE " + name + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, ASSIGNMENT text, GRADE INTEGER);");
+            db.execSQL("CREATE TABLE " + name + " ( "+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +ASSIGNMENT+" text, "+ GRADE +" INTEGER);");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
         {
             db.execSQL("DROP TABLE IF EXISTS "+ name); //delete what was there previously
-            db.execSQL("CREATE TABLE " + name + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, ASSIGNMENT text, GRADE INTEGER, COMMENT text);");
+            db.execSQL("CREATE TABLE " + name + " ( "+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " + ASSIGNMENT+ " text, "+ GRADE +" INTEGER, "+COMMENT+" text);");
         }
 
         @Override
         public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
         {
             db.execSQL("DROP TABLE IF EXISTS "+ name); //delete what was there previously
-                db.execSQL("CREATE TABLE " + name + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, ASSIGNMENT text, GRADE INTEGER, COMMENT text);");
+                db.execSQL("CREATE TABLE " + name + " ( "+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " + ASSIGNMENT+ " text, "+ GRADE + " INTEGER, "+COMMENT+" text);");
         }
 
         @Override
